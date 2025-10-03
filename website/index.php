@@ -3,7 +3,7 @@ session_start();
 ?>
 <!DOCTYPE html>
 <html>
-<head><title>Inventory Helper</title></head>
+<head><title>Cosmetics Store</title></head>
 <body>
    <section id="container">
        <main>
