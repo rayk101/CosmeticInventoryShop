@@ -1,7 +1,7 @@
 <?php
 error_log("\$_POST " . print_r($_POST, true));
-require_once("category.php");
-$categoryID = $_POST['categoryID'];
+require_once("cosmeticstype.php");
+$categoryID = $_POST['CosmeticsTypeID'];
 $category = Category::findCategory($categoryID);
 $result = $category->removeCategory();
 if ($result)

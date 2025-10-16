@@ -1,0 +1,20 @@
+POST http://localhost:3000/addcosmeticstype.test.php
+Content-Type: application/x-www-form-urlencoded
+
+CosmeticsTypeID=300
+&CosmeticsTypeCode=Jolo
+&CosmeticsTypeName=brush 
+###
+GET http://localhost:3000/listcosmeticstypes.test.php
+###
+POST http://localhost:3000/changecosmeticstype.test.php
+Content-Type: application/x-www-form-urlencoded
+
+CosmeticsTypeID=900
+&CosmeticsTypeCode=ELEC
+&CosmeticsTypeName=Electric 
+###
+POST http://localhost:3000/removecosmeticstype.test.php
+Content-Type: application/x-www-form-urlencoded
+
+CosmeticsTypeID=900

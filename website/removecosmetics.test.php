@@ -1,6 +1,6 @@
 <?php
-require_once("item.php");
-$itemID = $_POST['itemID'];
+require_once("cosmetics.php");
+$itemID = $_POST['CosmeticsID'];
 $item = Item::findItem($itemID);
 $result = $item->removeItem();
 if ($result)

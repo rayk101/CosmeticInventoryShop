@@ -1,0 +1,29 @@
+POST http://localhost:3000/addcosmetics.test.php
+Content-Type: application/x-www-form-urlencoded
+
+CosmeticsID=200
+&CosmeticsCode=Jason
+&CosmeticsName=Toleriane Hydrating Gentle Cleanser 
+&CosmeticsDescription="A daily face wash formulated with ceramides and niacinamide to gently cleanse while maintaining skin’s natural barrier. Ideal for normal to dry sensitive skin."
+&CosmeticsTypeID=200
+&CosmeticsWholesalePrice=32.00
+&CosmeticsListPrice=1194.00
+###
+GET http://localhost:3000/listcosmetics.test.php
+###
+POST http://localhost:3000/changecosmetics.test.php
+Content-Type: application/x-www-form-urlencoded
+
+CosmeticsID=200
+&CosmeticsCode=THT
+&CosmeticsName=Toleriane Hydrating Gentle Cleanser
+&CosmeticsDescription="A daily face wash formulated with ceramides and niacinamide to gently cleanse while maintaining skin’s natural barrier. Ideal for normal to dry sensitive skin."
+&CosmeticsTypeID=100
+&CosmeticsWholesalePrice=23.00
+&CosmeticsListPrice=1199.00
+###
+POST http://localhost:3000/removecosmetics.test.php
+Content-Type: application/x-www-form-urlencoded
+
+CosmeticsID=200
+
