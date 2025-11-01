@@ -190,5 +190,11 @@ class Item
         $row = $result->fetch_array();
         return $row ? $row[0] : NULL;
     }
+
+    
+    static function findItemsByType($CosmeticsTypeID)
+    {
+        return self::getItemsByCategory($CosmeticsTypeID);
+    }
 }
 ?>

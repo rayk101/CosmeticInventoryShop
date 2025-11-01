@@ -1,5 +1,5 @@
-<p>&copy Inventory Helper - Making Inventory Management Easier</p>
-<p>Name, Course & Section, Course Name, Assignment, yourid@njit.edu</p>
+<p>&Cosmetic Store Shope - Making Cosmetic Shopping Easier</p>
+<p>Rayyan, IT202 & 003, Internet Applications, Version1.0, rk975@njit.edu</p>
 <p>
    <?php
    date_default_timezone_set("America/New_York");

@@ -27,3 +27,4 @@ INSERT INTO CosmeticsManagers
 (emailAddress, password, pronouns, firstName, lastName)
 VALUES
 ('Megan@cosmetics.com', SHA2('Password2', 256), 'She/Her', 'Megan', 'Fox');
+

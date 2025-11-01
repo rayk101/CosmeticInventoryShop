@@ -18,4 +18,6 @@ INSERT INTO CosmeticsTypes
 VALUES
 (200, 'Larochposay', 'Toner');
 
+
+
 SELECT * FROM CosmeticsTypes;
