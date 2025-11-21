@@ -7,12 +7,14 @@ require_once("cosmeticstype.php");
 <html>
 <head>
    <title>Cosmetic Store Shop</title>
+   <link rel="stylesheet" type="text/css" href="ih_styles.css">
+   <link rel="icon" type="image/png" href="images/cream.png">
 </head>
 <body>
    <header>
        <?php include("header.inc.php"); ?>
    </header>
-   <section style="height: 425px;">
+   <section style="height: 375px;">
        <nav>
            <?php include("nav.inc.php"); ?>
        </nav>

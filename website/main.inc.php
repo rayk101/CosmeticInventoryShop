@@ -1,3 +1,25 @@
+<style>
+ form[name="login"] {
+   display: grid;
+   grid-template-columns: 100px 1fr;
+   gap: 10px 5px;
+   align-items: center;
+   max-width: 300px;
+ }
+ form[name="login"] label {
+   text-align: right;
+   padding-right: 5px;
+ }
+ form[name="login"] input[type="text"],
+ form[name="login"] input[type="password"] {
+   width: 100%;
+ }
+ form[name="login"] input[type="submit"] {
+   grid-column: 2;
+   justify-self: start;
+ }
+</style>
+
 <?php
 if (!isset($_SESSION['login'])) {
 ?>

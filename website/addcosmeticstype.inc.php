@@ -7,7 +7,14 @@ $CosmeticsTypeName = $_POST['CosmeticsTypeName'] ?? '';
 
 if ($CosmeticsTypeID === null || trim($CosmeticsTypeID) === '' || !is_numeric($CosmeticsTypeID)) {
     echo "<h2>Sorry, you must enter a valid type ID number</h2>\n";
-} else {
+
+} 
+
+else if (Category::findCategory($CosmeticsTypeID)) {
+    echo "<h2>Sorry, type ID #$CosmeticsTypeID already exists. Please choose another ID.</h2>\n";
+}
+
+else {
     $category = new Category($CosmeticsTypeID, $CosmeticsTypeCode, $CosmeticsTypeName);
     $result = $category->saveCategory();
 
