@@ -99,24 +99,28 @@ class Item
     static function findItem($CosmeticsID)
     {
         $db = getDB();
-        $query = "SELECT * FROM Cosmetics WHERE CosmeticsID = ?";
+        $query = "SELECT CosmeticsID, CosmeticsCode, CosmeticsName, CosmeticsDescription, CosmeticsTypeID, CosmeticsWholesalePrice, CosmeticsListPrice FROM Cosmetics WHERE CosmeticsID = ?";
         $stmt = $db->prepare($query);
         $stmt->bind_param("i", $CosmeticsID);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_array(MYSQLI_ASSOC);
-        $db->close();
-        if ($row) {
-            return new Item(
-                $row['CosmeticsID'],
-                $row['CosmeticsCode'],
-                $row['CosmeticsName'],
-                $row['CosmeticsDescription'],
-                $row['CosmeticsTypeID'],
-                $row['CosmeticsWholesalePrice'],
-                $row['CosmeticsListPrice']
-            );
+        
+        $id = null;
+        $code = null;
+        $name = null;
+        $desc = null;
+        $typeID = null;
+        $wholesale = null;
+        $listPrice = null;
+        
+        $stmt->bind_result($id, $code, $name, $desc, $typeID, $wholesale, $listPrice);
+        
+        if ($stmt->fetch()) {
+            $stmt->close();
+            $db->close();
+            return new Item($id, $code, $name, $desc, $typeID, $wholesale, $listPrice);
         } else {
+            $stmt->close();
+            $db->close();
             return NULL;
         }
     }
@@ -126,14 +130,15 @@ class Item
         $db = getDB();
         
         // First, verify the record exists
-        $checkQuery = "SELECT * FROM Cosmetics WHERE CosmeticsID = ?";
+        $checkQuery = "SELECT CosmeticsID FROM Cosmetics WHERE CosmeticsID = ?";
         $checkStmt = $db->prepare($checkQuery);
         $checkStmt->bind_param("i", $this->CosmeticsID);
         $checkStmt->execute();
-        $checkResult = $checkStmt->get_result();
-        $existingRow = $checkResult->fetch_array(MYSQLI_ASSOC);
         
-        if (!$existingRow) {
+        $existingID = null;
+        $checkStmt->bind_result($existingID);
+        
+        if (!$checkStmt->fetch()) {
             echo "<p style='color:red;'>ERROR: Item ID {$this->CosmeticsID} does not exist in database!</p>";
             echo "<p>Available IDs: ";
             $allQuery = "SELECT CosmeticsID FROM Cosmetics";
@@ -142,13 +147,16 @@ class Item
                 echo $row[0] . ", ";
             }
             echo "</p>";
+            $checkStmt->close();
             $db->close();
             return false;
         }
         
-        echo "<p style='color:blue;'>Record found. Current data:</p>";
-        echo "<p>Code: {$existingRow['CosmeticsCode']} → {$this->CosmeticsCode}</p>";
-        echo "<p>Name: {$existingRow['CosmeticsName']} → {$this->CosmeticsName}</p>";
+        $checkStmt->close();
+        
+        echo "<p style='color:blue;'>Record found. Updating...</p>";
+        echo "<p>Code: {$this->CosmeticsCode}</p>";
+        echo "<p>Name: {$this->CosmeticsName}</p>";
         
         $query = "UPDATE Cosmetics 
                   SET CosmeticsCode = ?, 
@@ -206,66 +214,66 @@ class Item
 
     function removeItem()
     {
-        $db = getDB();
+        $db = getDB();        $result = $stmt->execute();
         $query = "DELETE FROM Cosmetics WHERE CosmeticsID = ?";
-        $stmt = $db->prepare($query);
+        $stmt = $db->prepare($query);   return $result;
         $stmt->bind_param("i", $this->CosmeticsID);
-        $result = $stmt->execute();
-        $db->close();
-        return $result;
-    }
 
-    static function getItemsByCategory($CosmeticsTypeID)
+    static function getItemsByCategory($CosmeticsTypeID)y($CosmeticsTypeID)
     {
         $db = getDB();
-        $query = "SELECT * FROM Cosmetics WHERE CosmeticsTypeID = ?";
+        $query = "SELECT * FROM Cosmetics WHERE CosmeticsTypeID = ?";ics WHERE CosmeticsTypeID = ?";
         $stmt = $db->prepare($query);
-        $stmt->bind_param("i", $CosmeticsTypeID);
+        $stmt->bind_param("i", $CosmeticsTypeID);, $CosmeticsTypeID);
         $stmt->execute();
-        $result = $stmt->get_result();
-        if (mysqli_num_rows($result) > 0) {
+        $result = $stmt->get_result();lt();
+        if (mysqli_num_rows($result) > 0) {) {
             $items = array();
-            while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
+            while ($row = $result->fetch_array(MYSQLI_ASSOC)) {rray(MYSQLI_ASSOC)) {
                 $item = new Item(
                     $row['CosmeticsID'],
                     $row['CosmeticsCode'],
                     $row['CosmeticsName'],
-                    $row['CosmeticsDescription'],
-                    $row['CosmeticsTypeID'],
-                    $row['CosmeticsWholesalePrice'],
-                    $row['CosmeticsListPrice']
+                    $row['CosmeticsDescription'],  $row['CosmeticsDescription'],
+                    $row['CosmeticsTypeID'],],
+                    $row['CosmeticsWholesalePrice'],       $row['CosmeticsWholesalePrice'],
+                    $row['CosmeticsListPrice']'CosmeticsListPrice']
                 );
-                array_push($items, $item);
+                array_push($items, $item);array_push($items, $item);
             }
-            $db->close();
-            return $items;
-        } else {
-            $db->close();
+            $db->close();;
+            return $items;   return $items;
+        } else {   } else {
+            $db->close();            $db->close();
             return NULL;
-        }
+        }   }
     }
 
     static function getTotalItems()
     {
         $db = getDB();
-        $query = "SELECT COUNT(CosmeticsID) FROM Cosmetics";
-        $result = $db->query($query);
+        $query = "SELECT COUNT(CosmeticsID) FROM Cosmetics";   $query = "SELECT COUNT(CosmeticsID) FROM Cosmetics";
+        $result = $db->query($query);        $result = $db->query($query);
         $row = $result->fetch_array();
-        return $row ? $row[0] : NULL;
+        return $row ? $row[0] : NULL;   return $row ? $row[0] : NULL;
     }
 
-    static function getTotalListPrice()
+    static function getTotalListPrice()()
     {
         $db = getDB();
-        $query = "SELECT SUM(CosmeticsListPrice) FROM Cosmetics";
-        $result = $db->query($query);
+        $query = "SELECT SUM(CosmeticsListPrice) FROM Cosmetics";   $query = "SELECT SUM(CosmeticsListPrice) FROM Cosmetics";
+        $result = $db->query($query);        $result = $db->query($query);
         $row = $result->fetch_array();
-        return $row ? $row[0] : NULL;
+        return $row ? $row[0] : NULL;   return $row ? $row[0] : NULL;
     }
 
-    static function findItemsByType($CosmeticsTypeID)
-    {
-        return self::getItemsByCategory($CosmeticsTypeID);
-    }
+    static function findItemsByType($CosmeticsTypeID)   static function findItemsByType($CosmeticsTypeID)
+    {  {
+        return self::getItemsByCategory($CosmeticsTypeID);        return self::getItemsByCategory($CosmeticsTypeID);
+
+
+
+
+?>}    }    }
 }
 ?>
