@@ -1,5 +1,6 @@
 <?php
 session_start();
+require_once("config.php");
 require_once("cosmetics.php");
 require_once("cosmeticstype.php");
 ?>
@@ -20,27 +21,28 @@ require_once("cosmeticstype.php");
        </nav>
        <main>
            <?php
-          if (isset($_REQUEST['content'])) {
-            $content = $_REQUEST['content'];
+           if (isset($_REQUEST['content'])) {
+               $content = $_REQUEST['content'];
 
-    // ✅ Handle alternate or legacy file names safely
-                if ($content === 'addtype') {
-                    $content = 'addcosmeticstype';
-                }
-                if ($content === 'additem') {
-                    $content = 'addcosmetics';
-                }
-                if ($content === 'updateitem') {
-                    $content = 'updatecosmetic'; 
-                }
-                if ($content === 'displaycosmetictype') {
-                    $content = 'displaycosmeticstype'; // ✅ Fix: map to your real file name
-                }
+               if ($content === 'addtype') {
+                   $content = 'addcosmeticstype';
+               }
+               if ($content === 'additem') {
+                   $content = 'addcosmetics';
+               }
+               if ($content === 'displaycosmetictype') {
+                   $content = 'displaycosmeticstype';
+               }
 
-                include($content . ".inc.php");
-          } else {
-                include("main.inc.php");
-          }
+               // ⭐ THIS is crucial
+               if ($content === 'changeitem') {
+                   $content = 'changecosmetics';
+               }
+
+               include($content . ".inc.php");
+           } else {
+               include("main.inc.php");
+           }
            ?>
        </main>
    </section>

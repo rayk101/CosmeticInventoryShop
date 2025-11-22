@@ -1,53 +1,68 @@
 <?php
 require_once('cosmetics.php');
 
-// Cancel button
-if (!isset($_POST['answer']) || $_POST['answer'] !== 'Update Item') {
-    echo "<h2>Update cancelled.</h2>";
-    echo '<a href="index.php?content=listcosmetics">List items</a>';
-    exit;
-}
-
-// Collect data
-$CosmeticsID             = $_POST['CosmeticsID']             ?? null;
-$CosmeticsCode           = $_POST['CosmeticsCode']           ?? '';
-$CosmeticsName           = $_POST['CosmeticsName']           ?? '';
-$CosmeticsDescription    = $_POST['CosmeticsDescription']    ?? '';
-$CosmeticsTypeID         = $_POST['CosmeticsTypeID']         ?? '';
-$CosmeticsWholesalePrice = $_POST['CosmeticsWholesalePrice'] ?? '';
-$CosmeticsListPrice      = $_POST['CosmeticsListPrice']      ?? '';
-
-// Validate ID
-if ($CosmeticsID === null || trim($CosmeticsID) === '' || !is_numeric($CosmeticsID)) {
-    echo "<h2>Invalid CosmeticsID</h2>";
-    echo '<a href="index.php?content=listcosmetics">List items</a>';
-    exit;
-}
-
-// Create updated item
-$item = new Item(
-    $CosmeticsID,
-    $CosmeticsCode,
-    $CosmeticsName,
-    $CosmeticsDescription,
-    $CosmeticsTypeID,
-    $CosmeticsWholesalePrice,
-    $CosmeticsListPrice
-);
-
-// Try to update
-if (method_exists($item, 'updateItem')) {
-    $ok = $item->updateItem();
+if (!isset($_POST['CosmeticsID']) || !is_numeric($_POST['CosmeticsID'])) {
+    ?>
+    <h2>You did not select a valid CosmeticsID value</h2>
+    <a href="index.php?content=listitems">List items</a>
+    <?php
 } else {
-    $ok = $item->saveItem(); // fallback if no updateItem() method
-}
+    $CosmeticsID = (int)$_POST['CosmeticsID'];
+    $item = Item::findItem($CosmeticsID);
 
-// Feedback
-if ($ok) {
-    echo "<h2>Item #" . htmlspecialchars($CosmeticsID) . " successfully updated!</h2>";
-} else {
-    echo "<h2>Sorry, there was a problem updating that item.</h2>";
-}
+    if ($item) {
+        ?>
+        <h2>Update Item <?php echo htmlspecialchars($item->CosmeticsID); ?></h2><br>
+        <form name="items" action="index.php" method="post">
+            <table>
+                <tr>
+                    <td>CosmeticsID</td>
+                    <td><?php echo htmlspecialchars($item->CosmeticsID); ?></td>
+                </tr>
+                <tr>
+                    <td>CosmeticsCode</td>
+                    <td><input type="text" name="CosmeticsCode" required
+                               value="<?php echo htmlspecialchars($item->CosmeticsCode); ?>"></td>
+                </tr>
+                <tr>
+                    <td>CosmeticsName</td>
+                    <td><input type="text" name="CosmeticsName" required
+                               value="<?php echo htmlspecialchars($item->CosmeticsName); ?>"></td>
+                </tr>
+                <tr>
+                    <td>CosmeticsDescription</td>
+                    <td><input type="text" name="CosmeticsDescription" required
+                               value="<?php echo htmlspecialchars($item->CosmeticsDescription); ?>"></td>
+                </tr>
+                <tr>
+                    <td>CosmeticsTypeID</td>
+                    <td><input type="number" name="CosmeticsTypeID" required min="1"
+                               value="<?php echo htmlspecialchars($item->CosmeticsTypeID); ?>"></td>
+                </tr>
+                <tr>
+                    <td>Wholesale Price</td>
+                    <td><input type="number" name="CosmeticsWholesalePrice" required step="0.01" min="0"
+                               value="<?php echo htmlspecialchars($item->CosmeticsWholesalePrice); ?>"></td>
+                </tr>
+                <tr>
+                    <td>List Price</td>
+                    <td><input type="number" name="CosmeticsListPrice" required step="0.01" min="0"
+                               value="<?php echo htmlspecialchars($item->CosmeticsListPrice); ?>"></td>
+                </tr>
+            </table><br><br>
 
-echo '<a href="index.php?content=listcosmetics">Back to List</a>';
+            <input type="submit" name="answer" value="Update Item">
+            <input type="submit" name="answer" value="Cancel">
+
+            <input type="hidden" name="CosmeticsID" value="<?php echo htmlspecialchars($CosmeticsID); ?>">
+            <input type="hidden" name="content" value="changeitem">
+        </form>
+        <?php
+    } else {
+        ?>
+        <h2>Sorry, item <?php echo htmlspecialchars($CosmeticsID); ?> not found</h2>
+        <a href="index.php?content=listitems">List items</a>
+        <?php
+    }
+}
 ?>

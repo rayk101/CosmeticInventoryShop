@@ -43,18 +43,27 @@ class Item
     function saveItem()
     {
         $db = getDB();
-        $query = "INSERT INTO Cosmetics (CosmeticsID, CosmeticsCode, CosmeticsName, CosmeticsDescription, CosmeticsTypeID, CosmeticsWholesalePrice, CosmeticsListPrice) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $query = "INSERT INTO Cosmetics 
+                  (CosmeticsID, CosmeticsCode, CosmeticsName, CosmeticsDescription, CosmeticsTypeID, CosmeticsWholesalePrice, CosmeticsListPrice) 
+                  VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmt = $db->prepare($query);
+
+        $typeID     = (int)$this->CosmeticsTypeID;
+        $wholesale  = (float)$this->CosmeticsWholesalePrice;
+        $listPrice  = (float)$this->CosmeticsListPrice;
+
+        // i, s, s, s, i, d, d
         $stmt->bind_param(
-            "isssiid",
+            "isssidd",
             $this->CosmeticsID,
             $this->CosmeticsCode,
             $this->CosmeticsName,
             $this->CosmeticsDescription,
-            $this->CosmeticsTypeID,
-            $this->CosmeticsWholesalePrice,
-            $this->CosmeticsListPrice
+            $typeID,
+            $wholesale,
+            $listPrice
         );
+
         $result = $stmt->execute();
         $db->close();
         return $result;
@@ -115,21 +124,84 @@ class Item
     function updateItem()
     {
         $db = getDB();
-        $query = "UPDATE Cosmetics SET CosmeticsCode = ?, CosmeticsName = ?, CosmeticsDescription = ?, CosmeticsTypeID = ?, CosmeticsWholesalePrice = ?, CosmeticsListPrice = ? WHERE CosmeticsID = ?";
+        
+        // First, verify the record exists
+        $checkQuery = "SELECT * FROM Cosmetics WHERE CosmeticsID = ?";
+        $checkStmt = $db->prepare($checkQuery);
+        $checkStmt->bind_param("i", $this->CosmeticsID);
+        $checkStmt->execute();
+        $checkResult = $checkStmt->get_result();
+        $existingRow = $checkResult->fetch_array(MYSQLI_ASSOC);
+        
+        if (!$existingRow) {
+            echo "<p style='color:red;'>ERROR: Item ID {$this->CosmeticsID} does not exist in database!</p>";
+            echo "<p>Available IDs: ";
+            $allQuery = "SELECT CosmeticsID FROM Cosmetics";
+            $allResult = $db->query($allQuery);
+            while ($row = $allResult->fetch_array()) {
+                echo $row[0] . ", ";
+            }
+            echo "</p>";
+            $db->close();
+            return false;
+        }
+        
+        echo "<p style='color:blue;'>Record found. Current data:</p>";
+        echo "<p>Code: {$existingRow['CosmeticsCode']} → {$this->CosmeticsCode}</p>";
+        echo "<p>Name: {$existingRow['CosmeticsName']} → {$this->CosmeticsName}</p>";
+        
+        $query = "UPDATE Cosmetics 
+                  SET CosmeticsCode = ?, 
+                      CosmeticsName = ?, 
+                      CosmeticsDescription = ?, 
+                      CosmeticsTypeID = ?, 
+                      CosmeticsWholesalePrice = ?, 
+                      CosmeticsListPrice = ? 
+                  WHERE CosmeticsID = ?";
+
         $stmt = $db->prepare($query);
+
+        if (!$stmt) {
+            echo "<p style='color:red;'>Prepare failed: " . htmlspecialchars($db->error) . "</p>";
+            $db->close();
+            return false;
+        }
+
+        $typeID     = (int)$this->CosmeticsTypeID;
+        $wholesale  = (float)$this->CosmeticsWholesalePrice;
+        $listPrice  = (float)$this->CosmeticsListPrice;
+        $id         = (int)$this->CosmeticsID;
+
         $stmt->bind_param(
-            "sssiiid",
+            "sssiddi",
             $this->CosmeticsCode,
             $this->CosmeticsName,
             $this->CosmeticsDescription,
-            $this->CosmeticsTypeID,
-            $this->CosmeticsWholesalePrice,
-            $this->CosmeticsListPrice,
-            $this->CosmeticsID
+            $typeID,
+            $wholesale,
+            $listPrice,
+            $id
         );
+
         $result = $stmt->execute();
+
+        if (!$result) {
+            echo "<p style='color:red;'>Execute failed: " . htmlspecialchars($stmt->error) . "</p>";
+            $stmt->close();
+            $db->close();
+            return false;
+        }
+        
+        $affectedRows = $stmt->affected_rows;
+        echo "<p style='color:green;'>Rows affected: " . $affectedRows . "</p>";
+        
+        if ($affectedRows === 0) {
+            echo "<p style='color:orange;'>WARNING: Update executed but no rows were changed. Data may be identical.</p>";
+        }
+
+        $stmt->close();
         $db->close();
-        return $result;
+        return true;
     }
 
     function removeItem()
@@ -191,7 +263,6 @@ class Item
         return $row ? $row[0] : NULL;
     }
 
-    
     static function findItemsByType($CosmeticsTypeID)
     {
         return self::getItemsByCategory($CosmeticsTypeID);

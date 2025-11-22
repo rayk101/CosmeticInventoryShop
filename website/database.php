@@ -8,12 +8,13 @@
    mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
    try {
        $db = new mysqli($host, $username, $password, $dbname, $port);
-       error_log("You are connected to the $host database!");
-       //echo "You are connected to the $host database!"; 
+       $db->set_charset("utf8mb4");
+       error_log("Connected to $host database");
        return $db;
    } catch (mysqli_sql_exception $e) {
-       error_log($e->getMessage(), 0);
-     //  echo $e->getMessage(); 
+       error_log("Database Error: " . $e->getMessage());
+       echo "<p style='color:red;'>Database connection failed: " . htmlspecialchars($e->getMessage()) . "</p>";
+       exit;
    }
  }
  // getDB();

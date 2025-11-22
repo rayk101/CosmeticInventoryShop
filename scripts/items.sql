@@ -21,17 +21,15 @@ INSERT INTO Cosmetics
 VALUES
 (2000, 'COSMO2', 'HydraGlow Serum', 'Lightweight serum that hydrates and brightens dull skin', 102, 9.75, 22.00);
 
+INSERT INTO Cosmetics
+(CosmeticsID, CosmeticsCode, CosmeticsName, CosmeticsDescription, CosmeticsTypeID, CosmeticsWholesalePrice, CosmeticsListPrice)
+VALUES
+(3000, 'THT', 'Toleriane Hydrating Gentle Cleanser', 'A daily face wash formulated with ceramides and niacinamide to gently cleanse while maintaining skin\'s natural barrier. Ideal for normal to dry sensitive skin.', 200, 10.75, 26.00);
 
 INSERT INTO Cosmetics
 (CosmeticsID, CosmeticsCode, CosmeticsName, CosmeticsDescription, CosmeticsTypeID, CosmeticsWholesalePrice, CosmeticsListPrice)
 VALUES
-(200, 'THT', 'Toleriane Hydrating Gentle Cleanser ', 'A daily face wash formulated with ceramides and niacinamide to gently cleanse while maintaining skin’s natural barrier. Ideal for normal to dry sensitive skin.', 200, 10.75, 26.00);
+(4000, 'B2B', 'Effaclar Adapalene Gel 0.1% Acne Treatment', 'A prescription-strength retinoid gel that treats acne, unclogs pores, and prevents future breakouts. Suitable for oily and acne-prone skin.', 200, 15.75, 35.00);
 
-
-INSERT INTO Cosmetics
-(CosmeticsID, CosmeticsCode, CosmeticsName, CosmeticsDescription, CosmeticsTypeID, CosmeticsWholesalePrice, CosmeticsListPrice)
-VALUES
-(200, 'B2B', 'Effaclar Adapalene Gel 0.1% Acne Treatment', 'A prescription-strength retinoid gel that treats acne, unclogs pores, and prevents future breakouts. Suitable for oily and acne-prone skin.', 200, 15.75, .00);
-
-SELECT * FROM Cosmetics
+SELECT * FROM Cosmetics;
 
