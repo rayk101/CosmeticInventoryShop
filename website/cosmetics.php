@@ -161,21 +161,33 @@ class Item
     static function getItemsByCategory($CosmeticsTypeID)
     {
         $db = getDB();
-        $query = "SELECT * FROM Cosmetics WHERE CosmeticsTypeID = ?";
+        $query = "SELECT CosmeticsID, CosmeticsCode, CosmeticsName, CosmeticsDescription, CosmeticsTypeID, CosmeticsWholesalePrice, CosmeticsListPrice FROM Cosmetics WHERE CosmeticsTypeID = ?";
         $stmt = $db->prepare($query);
         $stmt->bind_param("i", $CosmeticsTypeID);
         $stmt->execute();
-        $result = $stmt->get_result();
-        if (mysqli_num_rows($result) > 0) {
-            $items = array();
-            while ($row = $result->fetch_array(MYSQLI_ASSOC)) {
-                $item = new Item($row['CosmeticsID'], $row['CosmeticsCode'], $row['CosmeticsName'], $row['CosmeticsDescription'], $row['CosmeticsTypeID'], $row['CosmeticsWholesalePrice'], $row['CosmeticsListPrice']);
-                array_push($items, $item);
-            }
-            $db->close();
+        
+        $id = null;
+        $code = null;
+        $name = null;
+        $desc = null;
+        $typeID = null;
+        $wholesale = null;
+        $listPrice = null;
+        
+        $stmt->bind_result($id, $code, $name, $desc, $typeID, $wholesale, $listPrice);
+        
+        $items = array();
+        while ($stmt->fetch()) {
+            $item = new Item($id, $code, $name, $desc, $typeID, $wholesale, $listPrice);
+            array_push($items, $item);
+        }
+        
+        $stmt->close();
+        $db->close();
+        
+        if (count($items) > 0) {
             return $items;
         } else {
-            $db->close();
             return NULL;
         }
     }
