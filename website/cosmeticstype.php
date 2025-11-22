@@ -57,21 +57,24 @@ class Category
     static function findCategory($CosmeticsTypeID)
     {
         $db = getDB();
-        $query = "SELECT * FROM CosmeticsTypes WHERE CosmeticsTypeID = ?";
+        $query = "SELECT CosmeticsTypeID, CosmeticsTypeCode, CosmeticsTypeName FROM CosmeticsTypes WHERE CosmeticsTypeID = ?";
         $stmt = $db->prepare($query);
         $stmt->bind_param("i", $CosmeticsTypeID);
         $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_array(MYSQLI_ASSOC);
-        $db->close();
-
-        if ($row) {
-            return new Category(
-                $row['CosmeticsTypeID'],
-                $row['CosmeticsTypeCode'],
-                $row['CosmeticsTypeName']
-            );
+        
+        $typeID = null;
+        $typeCode = null;
+        $typeName = null;
+        
+        $stmt->bind_result($typeID, $typeCode, $typeName);
+        
+        if ($stmt->fetch()) {
+            $stmt->close();
+            $db->close();
+            return new Category($typeID, $typeCode, $typeName);
         } else {
+            $stmt->close();
+            $db->close();
             return NULL;
         }
     }
