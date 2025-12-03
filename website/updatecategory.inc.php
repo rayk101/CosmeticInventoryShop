@@ -25,27 +25,32 @@
 require_once("cosmeticstype.php");
 
 if (isset($_SESSION['login'])) {
-    $CosmeticsTypeID = $_POST['CosmeticsTypeID'];
-    $category = Category::findCategory($CosmeticsTypeID);
-    if ($category) {
-    ?>
-        <h2>Update Category <?php echo htmlspecialchars($CosmeticsTypeID); ?></h2><br>
-        <form name="categories" action="index.php" method="post">
-            <label for="CosmeticsTypeCode">Type Code:</label>
-            <input type="text" name="CosmeticsTypeCode" id="CosmeticsTypeCode" required value="<?php echo htmlspecialchars($category->CosmeticsTypeCode); ?>">
-            <label for="CosmeticsTypeName">Type Name:</label>
-            <input type="text" name="CosmeticsTypeName" id="CosmeticsTypeName" required value="<?php echo htmlspecialchars($category->CosmeticsTypeName); ?>">
-            <input type="submit" name="answer" value="Update Category">
-            <input type="submit" name="answer" value="Cancel">
-            <input type="hidden" name="CosmeticsTypeID" value="<?php echo htmlspecialchars($CosmeticsTypeID); ?>">
-            <input type="hidden" name="content" value="changecategory">
-        </form>
-    <?php
+    if (!isset($_POST['CosmeticsTypeID']) || !is_numeric($_POST['CosmeticsTypeID'])) {
+        echo "<h2>You did not select a valid Category ID</h2>\n";
+        echo '<a href="index.php?content=listcosmeticstype">List Categories</a>';
     } else {
-    ?>
-        <h2>Sorry, category <?php echo htmlspecialchars($CosmeticsTypeID); ?> not found</h2>
-        <a href="index.php?content=listcosmeticstype">List Categories</a>
-    <?php
+        $CosmeticsTypeID = (int)$_POST['CosmeticsTypeID'];
+        $category = Category::findCategory($CosmeticsTypeID);
+        if ($category) {
+        ?>
+            <h2>Update Category <?php echo htmlspecialchars($CosmeticsTypeID); ?></h2><br>
+            <form name="categories" action="index.php" method="post">
+                <label for="CosmeticsTypeCode">Type Code:</label>
+                <input type="text" name="CosmeticsTypeCode" id="CosmeticsTypeCode" required value="<?php echo htmlspecialchars($category->CosmeticsTypeCode); ?>">
+                <label for="CosmeticsTypeName">Type Name:</label>
+                <input type="text" name="CosmeticsTypeName" id="CosmeticsTypeName" required value="<?php echo htmlspecialchars($category->CosmeticsTypeName); ?>">
+                <input type="submit" name="answer" value="Update Category">
+                <input type="submit" name="answer" value="Cancel">
+                <input type="hidden" name="CosmeticsTypeID" value="<?php echo htmlspecialchars($CosmeticsTypeID); ?>">
+                <input type="hidden" name="content" value="changecategory">
+            </form>
+        <?php
+        } else {
+        ?>
+            <h2>Sorry, category <?php echo htmlspecialchars($CosmeticsTypeID); ?> not found</h2>
+            <a href="index.php?content=listcosmeticstype">List Categories</a>
+        <?php
+        }
     }
 } else {
     echo "<h2>Please log in first</h2>\n";
