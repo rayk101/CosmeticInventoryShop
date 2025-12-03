@@ -100,5 +100,15 @@ class Category
         $db->close();
         return $result;
     }
+
+    static function getTotalCategories()
+    {
+        $db = getDB();
+        $query = "SELECT COUNT(CosmeticsTypeID) FROM CosmeticsTypes";
+        $result = $db->query($query);
+        $row = $result->fetch_array();
+        $db->close();
+        return $row ? $row[0] : NULL;
+    }
 }
 ?>

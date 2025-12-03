@@ -10,6 +10,7 @@ require_once("cosmeticstype.php");
    <title>Cosmetic Store Shop</title>
    <link rel="stylesheet" type="text/css" href="ih_styles.css">
    <link rel="icon" type="image/png" href="images/cream.png">
+   <script src="realtime.js"></script>
 </head>
 <body>
    <header>
@@ -45,6 +46,13 @@ require_once("cosmeticstype.php");
            }
            ?>
        </main>
+       <aside>
+           <?php include("aside.inc.php"); ?>
+           <script>
+               getRealTime();
+               setInterval(getRealTime, 5000);
+           </script>
+       </aside>
    </section>
    <footer>
        <?php include("footer.inc.php"); ?>
