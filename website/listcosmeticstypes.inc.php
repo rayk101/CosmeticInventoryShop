@@ -22,7 +22,7 @@ function button_click(target)
 
 <?php
 require_once("cosmeticstype.php");
-
+# testing comment
 $categories = Category::getCategories();
 if ($categories) {
 ?>
@@ -48,3 +48,4 @@ if ($categories) {
     echo "<h2>No categories found</h2>";
 }
 ?>
+
