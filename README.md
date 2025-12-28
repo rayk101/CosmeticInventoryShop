@@ -473,7 +473,7 @@ This project is developed as part of **IT202 - Internet Applications** coursewor
 
 ## 👨‍💻 Author
 
-**Rahym Khan** — *Full-Stack Development*
+**Rayyan Khan** — *Full-Stack Development*
 
 ---
 
